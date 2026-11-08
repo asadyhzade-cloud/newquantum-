@@ -1,0 +1,28 @@
+name: Build Neat Mod
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Extract source
+        run: |
+          mkdir source
+          unzip -q ./*.zip -d source
+          cd source/*
+          chmod +x gradlew
+          ./gradlew build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Neat-Mod
+          path: source/**/*.jar
